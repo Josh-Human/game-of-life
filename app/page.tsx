@@ -1,21 +1,39 @@
-import { randomInt } from 'crypto';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { create_board, next_board_state } from '@/helpers/board';
 
 export default function HomePage() {
-  const create_board = (width: number, height: number): number[][] => {
-    const empty_board = Array(height).fill(Array(width).fill(0));
-    const initial_board = empty_board.map((row) => row.map((_) => randomInt(2)));
+  const create_board_element = (board: number[][]) =>
+    board.map((row, i) => (
+      <div key={i} className="flex">
+        {row.map((item, j) =>
+          item ? (
+            <div key={`row-${i}-item-${j}`} className="border border-black w-16 h-16 bg-black" />
+          ) : (
+            <div key={`row-${i}-item-${j}`} className="border border-black w-16 h-16" />
+          )
+        )}
+      </div>
+    ));
 
-    return initial_board;
-  };
+    const [width, height] = [20, 20];
+
+  const [boardDisplay, setBoard] = useState(create_board_element(create_board(width, height)));
+  const [boardState, setBoardState] = useState(create_board(width, height));
+
+  useEffect(() => {
+    setBoard(create_board_element(boardState));
+    const timer = setTimeout(() => {
+      setBoardState(next_board_state(boardState));
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [boardState]);
 
   return (
     <>
       <div className="w-full h-screen flex flex-col justify-center items-center">
-        {create_board(5, 5).map((row, i) => (
-            <div key={i} className="flex">
-              {row.map((item, j) => <span key={j} className={`border border-black w-16 h-16 ${item ? 'bg-black' : ''}`} />)}
-            </div>
-          ))}
+        {boardDisplay}
       </div>
     </>
   );
