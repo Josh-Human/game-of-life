@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { create_board, next_board_state } from '@/helpers/board';
+import FileInput from '@/components/file-input';
 
 export default function HomePage() {
   const create_board_element = (board: number[][]) =>
@@ -17,7 +18,7 @@ export default function HomePage() {
       </div>
     ));
 
-    const [width, height] = [20, 20];
+  const [width, height] = [10, 10];
 
   const [boardDisplay, setBoard] = useState(create_board_element(create_board(width, height)));
   const [boardState, setBoardState] = useState(create_board(width, height));
@@ -30,9 +31,15 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, [boardState]);
 
+  const loadBoard = (board: number[][]) => {
+    setBoardState(board);
+  };
+
   return (
     <>
       <div className="w-full h-screen flex flex-col justify-center items-center">
+        <FileInput loadBoard={loadBoard} />
+
         {boardDisplay}
       </div>
     </>
