@@ -1,4 +1,5 @@
 import { Group, FileButton, Button } from '@mantine/core';
+import { IconUpload } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 interface FileInputProps {
@@ -25,9 +26,13 @@ export default function FileInput({ loadBoard }: FileInputProps) {
   }, [file]);
   return (
     <>
-      <Group className="my-5 justify-center">
+      <Group className="justify-center">
         <FileButton onChange={setFile} accept=".txt">
-          {(props) => <Button {...props}>Upload image</Button>}
+          {(props) => (
+            <Button {...props} rightSection={<IconUpload />}>
+              Upload configuration
+            </Button>
+          )}
         </FileButton>
       </Group>
     </>
