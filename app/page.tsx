@@ -24,7 +24,7 @@ export default function HomePage() {
     setBoardState(board);
   };
 
-  const setNextBoardState = () => {
+  const showNextBoard = () => {
     loadBoard(next_board_state(board_state));
   };
 
@@ -64,7 +64,7 @@ export default function HomePage() {
             >
               {playOrPauseIcon}
             </Button>
-            <Button disabled={is_playing} onClick={setNextBoardState}>
+            <Button disabled={is_playing} onClick={showNextBoard}>
               <IconArrowRight />
             </Button>
 
