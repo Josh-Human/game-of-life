@@ -1,13 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  IconPlayerPause,
-  IconPlayerPlay,
-  IconSettings,
-} from '@tabler/icons-react';
+import { IconArrowRight, IconPlayerPause, IconPlayerPlay, IconSettings } from '@tabler/icons-react';
 import { Button } from '@mantine/core';
-import { create_board } from '@/helpers/board';
+import { create_board, next_board_state } from '@/helpers/board';
 import FileInput from '@/components/file-input';
 import Board from '@/components/Board';
 
@@ -18,6 +14,10 @@ export default function HomePage() {
 
   const loadBoard = (board: number[][]) => {
     setBoardState(board);
+  };
+
+  const setNextBoardState = () => {
+    setBoardState(next_board_state(board_state));
   };
 
   const playOrPauseIcon = is_playing ? <IconPlayerPause /> : <IconPlayerPlay />;
@@ -44,6 +44,9 @@ export default function HomePage() {
               }}
             >
               {playOrPauseIcon}
+            </Button>
+            <Button disabled={is_playing} onClick={setNextBoardState}>
+              <IconArrowRight />
             </Button>
 
             <FileInput loadBoard={loadBoard} />
