@@ -1,27 +1,34 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IconPlayerPlay, IconRotateClockwise, IconSettings } from '@tabler/icons-react';
-import { Button, Skeleton } from '@mantine/core';
+import { Skeleton } from '@mantine/core';
 import { create_board, next_board_state } from '@/helpers/board';
-import FileInput from '@/components/file-input';
 
 export default function HomePage() {
   const board_container_width = document.querySelector('#board-container')?.clientWidth ?? 0;
+  const board_container_height = document.querySelector('#board-container')?.clientHeight ?? 0;
+  const board_size_to_use =
+    board_container_width >= board_container_height
+      ? board_container_height
+      : board_container_width;
   const [board_width, board_height] = [50, 50];
-  const squareLength = board_container_width / board_width;
+  const squareLength = board_size_to_use / board_width;
 
   const create_board_element = (board: number[][]) => (
-    <Skeleton visible={board_container_width === 0} className="h-[500px] w-[500px]">
+    <Skeleton
+      visible={board_size_to_use === 0}
+      className="h-full w-full"
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
       {board.map((row, i) => (
         <div key={i} className="flex">
           {row.map((item, j) => (
-              <div
-                key={`row-${i}-item-${j}`}
-                style={{ height: squareLength, width: squareLength }}
-                className={`border border-black ${item ? 'bg-black' : ''}`}
-              />
-            ))}
+            <div
+              key={`row-${i}-item-${j}`}
+              style={{ height: squareLength, width: squareLength }}
+              className={`border border-black ${item ? 'bg-black' : ''}`}
+            />
+          ))}
         </div>
       ))}
     </Skeleton>
@@ -40,22 +47,21 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, [boardState]);
 
-  const loadBoard = (board: number[][]) => {
-    setBoardState(board);
-  };
 
   return (
     <>
-      <div className="w-full h-screen flex flex-col justify-center">
-        <div className="grid grid-cols-12">
+        <div className="grid grid-cols-12 h-full">
           <div className="col-span-2" />
-          <div className="col-span-8 flex flex-col items-center" id="board-container">
-            <h1 className="text-5xl size text-center mb-8 font-mono">Conway's Game of Life</h1>
-            {boardDisplay}
+          <div className="col-span-8 flex flex-col items-center">
+            <h1 className="text-5xl whitespace-nowrap text-center mb-8 font-mono">
+              Conway&apos;s Game of Life
+            </h1>
+            <div className="flex grow w-full" id="board-container">
+              {boardDisplay}
+            </div>
           </div>
           <div className="col-span-2" />
         </div>
-      </div>
     </>
   );
 }
