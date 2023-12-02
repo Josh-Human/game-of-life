@@ -56,7 +56,9 @@ export default function Board({
 
   useEffect(() => {
     setBoard(create_board_element(board_state));
-    board_interval.start();
+    if (is_playing) {
+      board_interval.start();
+    }
     return () => board_interval.stop();
   }, [board_state]);
 
