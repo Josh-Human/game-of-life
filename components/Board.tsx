@@ -1,5 +1,6 @@
 import { Skeleton } from '@mantine/core';
 import { useState, useEffect } from 'react';
+import { useInterval } from '@mantine/hooks';
 import { create_board, next_board_state } from '@/helpers/board';
 
 interface BoardProps {
@@ -7,6 +8,7 @@ interface BoardProps {
   board_height: number;
   board_state: number[][];
   setBoardState: (new_board: number[][]) => void;
+  is_playing: boolean;
 }
 
 export default function Board({
@@ -14,6 +16,7 @@ export default function Board({
   board_height,
   board_state,
   setBoardState,
+  is_playing,
 }: BoardProps) {
   const board_container_width = document.querySelector('#board-container')?.clientWidth ?? 0;
   const board_container_height = document.querySelector('#board-container')?.clientHeight ?? 0;
@@ -47,13 +50,23 @@ export default function Board({
     create_board_element(create_board(board_width, board_height))
   );
 
+  const board_interval = useInterval(() => {
+    setBoardState(next_board_state(board_state));
+  }, 2000);
+
   useEffect(() => {
     setBoard(create_board_element(board_state));
-    const timer = setTimeout(() => {
-      setBoardState(next_board_state(board_state));
-    }, 2000);
-    return () => clearTimeout(timer);
+    board_interval.start();
+    return () => board_interval.stop();
   }, [board_state]);
+
+  useEffect(() => {
+    if (is_playing) {
+      board_interval.start();
+    } else {
+      board_interval.stop();
+    }
+  }, [is_playing]);
 
   return (
     <div className="flex grow w-full" id="board-container">
