@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: any }) {
                 <p className="font-mono">Cellular Automata</p>
               </Button>
             </div>
-            <div className="px-10 py-16 h-full">{children}</div>
+            <div className="px-10 py-12 h-full">{children}</div>
           </div>
         </MantineProvider>
       </body>

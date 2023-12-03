@@ -26,10 +26,10 @@ export default function FileInput({ loadBoard }: FileInputProps) {
   }, [file]);
   return (
     <>
-      <Group className="justify-center">
+      <Group className="justify-center w-full">
         <FileButton onChange={setFile} accept=".txt">
           {(props) => (
-            <Button {...props} rightSection={<IconUpload />}>
+            <Button {...props} rightSection={<IconUpload />} fullWidth>
               Upload configuration
             </Button>
           )}
